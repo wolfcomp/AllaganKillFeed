@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Dalamud.NET.Sdk/12.0.2">
+	<PropertyGroup>
+		<Authors>WildWolf</Authors>
+		<Company></Company>
+		<Version>10.0.0.0</Version>
+		<Description>A funny plugin for kill feed in frontline.</Description>
+		<Copyright>(c) WildWolf 2025-</Copyright>
+		<PackageProjectUrl>https://github.com/wolfcomp/AllaganKillFeed</PackageProjectUrl>
+	</PropertyGroup>
+</Project>

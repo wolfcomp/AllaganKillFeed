@@ -1,0 +1,14 @@
+﻿{
+  "Author": "WildWolf",
+  "Name": "AllaganKillFeed",
+  "Punchline": "Kill feed in frontline.",
+  "Description": "Ever wanted a kill feed ala Battlefield and Modern Warfare? Well now you can with AllaganKillFeed.",
+  "Tags": [
+    "pvp",
+    "killfeed"
+  ],
+  "Changelog": "",
+  "RepoUrl": "https://github.com/wolfcomp/AllaganKillFeed",
+  "ApplicableVersion": "any",
+  "LoadPriority": 0
+}
