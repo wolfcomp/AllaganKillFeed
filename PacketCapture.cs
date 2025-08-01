@@ -59,21 +59,35 @@ internal unsafe class PacketCapture : IDisposable
                 if (battleChara == null) return;
                 if (battleChara->ObjectKind is not (ObjectKind.Pc or ObjectKind.BattleNpc)) return;
                 var seStringBuilder = new SeStringBuilder();
-                var lastDamageGameObject = (BattleChara*)gameObjectManager->Objects.GetObjectByEntityId(lastDamages[entityId]);
-                if (lastDamageGameObject != null && lastDamageGameObject->ObjectKind is (ObjectKind.Pc or ObjectKind.BattleNpc))
+                if (lastDamages.TryGetValue(entityId, out var lastDamageEntityId))
                 {
-                    seStringBuilder.Append(battleChara->NameString);
-                    if (battleChara->ClassJob > 0)
+                    var lastDamageGameObject = (BattleChara*)gameObjectManager->Objects.GetObjectByEntityId(lastDamageEntityId);
+                    if (lastDamageGameObject != null && lastDamageGameObject->ObjectKind is (ObjectKind.Pc or ObjectKind.BattleNpc))
                     {
-                        seStringBuilder.Append(" ");
-                        seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
+                        seStringBuilder.Append(battleChara->NameString);
+                        if (battleChara->ClassJob > 0)
+                        {
+                            seStringBuilder.Append(" ");
+                            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
+                        }
+                        seStringBuilder.Append(" was killed by ");
+                        seStringBuilder.Append(lastDamageGameObject->NameString);
+                        if (lastDamageGameObject->ClassJob > 0)
+                        {
+                            seStringBuilder.Append(" ");
+                            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(lastDamageGameObject->ClassJob).Abbreviation]));
+                        }
                     }
-                    seStringBuilder.Append(" was killed by ");
-                    seStringBuilder.Append(lastDamageGameObject->NameString);
-                    if (lastDamageGameObject->ClassJob > 0)
+                    else
                     {
-                        seStringBuilder.Append(" ");
-                        seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(lastDamageGameObject->ClassJob).Abbreviation]));
+                        seStringBuilder.Append("Killed: ");
+                        seStringBuilder.Append(battleChara->NameString);
+                        if (battleChara->ClassJob > 0)
+                        {
+                            seStringBuilder.Append(" ");
+                            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
+                        }
+                        seStringBuilder.Append(" was killed!");
                     }
                 }
                 else

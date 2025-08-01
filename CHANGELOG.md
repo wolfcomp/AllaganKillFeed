@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.3] (2025-08-01)
+Fix index lookup crash
+
 ## [1.0.2] (2025-08-01)
 Add who last was targeted when death happened
 
