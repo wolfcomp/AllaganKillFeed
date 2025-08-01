@@ -102,6 +102,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.PAT }}
           name: ${{ env.plugin_name }} ${{ github.ref_name }}
           body: ${{ steps.extract-release-notes.outputs.release_notes }}
           files: artifact/*
