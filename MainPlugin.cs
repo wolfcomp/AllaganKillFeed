@@ -16,10 +16,10 @@ public class MainPlugin : IDalamudPlugin
 {
     private DalamudServiceIntermediate<IFramework> framework { get; }
     private Dictionary<uint, bool> killedLastSecond = new();
-    internal static DalamudServiceIntermediate<IPluginLog> logger;
+    private static DalamudServiceIntermediate<IPluginLog> logger;
     private DalamudServiceIntermediate<IDataManager> dataManager;
     private IDalamudPluginInterface pluginInterface;
-    internal static DalamudServiceIntermediate<ISeStringEvaluator> seStringEvaluator;
+    private static DalamudServiceIntermediate<ISeStringEvaluator> seStringEvaluator;
 
     public MainPlugin(IDalamudPluginInterface pluginInterface)
     {

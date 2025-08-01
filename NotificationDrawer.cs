@@ -1,4 +1,4 @@
-﻿using Dalamud.Interface.Utility;
+using Dalamud.Interface.Utility;
 using ImGuiNET;
 using Lumina.Text.ReadOnly;
 using System;
@@ -15,7 +15,7 @@ internal class NotificationConstants
     public static float ScaledWindowPadding => MathF.Round(16 * ImGuiHelpers.GlobalScale);
     public static float ScaledViewportEdgeMargin => MathF.Round(20 * ImGuiHelpers.GlobalScale);
     public static float ScaledIconSize => MathF.Round(IconSize * ImGuiHelpers.GlobalScale);
-    public static float ScaledCoponentGap => MathF.Round(5 * ImGuiHelpers.GlobalScale);
+    public static float ScaledCoponentGap => MathF.Round(2 * ImGuiHelpers.GlobalScale);
     public static float ScaledExpiryProgressBarHeight => MathF.Round(3 * ImGuiHelpers.GlobalScale);
     public static float ScaledWindowGap => MathF.Round(10 * ImGuiHelpers.GlobalScale);
     public const float MaxNotificationWindowWidthWrtMainViewportWidth = 2f / 3;
@@ -130,9 +130,8 @@ internal record ActiveNotification(DateTime CreatedAt, DateTime Expiry, TimeSpan
             ImGuiWindowFlags.NoSavedSettings);
         ImGui.PushID(id.GetHashCode());
         DrawWindowBackgroundProgressBar();
-        var textColumnX = NotificationConstants.ScaledWindowPadding * 2;
-        var textColumnWidth = width - textColumnX - NotificationConstants.ScaledWindowPadding;
-        var textColumnOffset = new Vector2(textColumnWidth, actionWindowHeight);
+        var textColumnWidth = width + NotificationConstants.ScaledWindowPadding;
+        var textColumnOffset = new Vector2(NotificationConstants.ScaledWindowPadding, NotificationConstants.ScaledCoponentGap);
         textColumnOffset.Y += DrawTitle(textColumnOffset, textColumnWidth);
         textColumnOffset.Y += NotificationConstants.ScaledCoponentGap;
         DrawContentBody(textColumnOffset, textColumnWidth);
