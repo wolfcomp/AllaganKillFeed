@@ -14,22 +14,26 @@ namespace AllaganKillFeed;
 
 public class MainPlugin : IDalamudPlugin
 {
-    private DalamudServiceIntermediate<IFramework> framework { get; }
-    private Dictionary<uint, bool> killedLastSecond = new();
-    private static DalamudServiceIntermediate<IPluginLog> logger;
-    private DalamudServiceIntermediate<IDataManager> dataManager;
-    private IDalamudPluginInterface pluginInterface;
-    private static DalamudServiceIntermediate<ISeStringEvaluator> seStringEvaluator;
+    private static DalamudServiceIntermediate<IFramework> framework = null!;
+    private readonly Dictionary<uint, bool> killedLastSecond = new();
+    private static DalamudServiceIntermediate<IPluginLog> logger = null!;
+    internal static DalamudServiceIntermediate<IDataManager> DataManager = null!;
+    private readonly IDalamudPluginInterface pluginInterface;
+    internal static DalamudServiceIntermediate<ISeStringEvaluator> SeStringEvaluator = null!;
+    internal static DalamudServiceIntermediate<IGameInteropProvider> GameInteropProvider = null!;
+    private readonly PacketCapture packetCapture;
 
     public MainPlugin(IDalamudPluginInterface pluginInterface)
     {
         framework = new DalamudServiceIntermediate<IFramework>(pluginInterface);
-        framework.Service.Update += Service_Update;
+        // framework.Service.Update += Service_Update;
         pluginInterface.UiBuilder.Draw += NotificationDrawer.Draw;
         this.pluginInterface = pluginInterface;
         logger = new DalamudServiceIntermediate<IPluginLog>(pluginInterface);
-        dataManager = new DalamudServiceIntermediate<IDataManager>(pluginInterface);
-        seStringEvaluator = new DalamudServiceIntermediate<ISeStringEvaluator>(pluginInterface);
+        DataManager = new DalamudServiceIntermediate<IDataManager>(pluginInterface);
+        SeStringEvaluator = new DalamudServiceIntermediate<ISeStringEvaluator>(pluginInterface);
+        GameInteropProvider = new DalamudServiceIntermediate<IGameInteropProvider>(pluginInterface);
+        packetCapture = new PacketCapture();
     }
 
     private unsafe void Service_Update(IFramework framework)
@@ -54,7 +58,7 @@ public class MainPlugin : IDalamudPlugin
                     if (battleCharaPtr->ClassJob > 0)
                     {
                         seStringBuilder.Append(" ");
-                        seStringBuilder.Append(seStringEvaluator.Service.EvaluateFromAddon(37, [dataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleCharaPtr->ClassJob).Abbreviation]));
+                        seStringBuilder.Append(SeStringEvaluator.Service.EvaluateFromAddon(37, [DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleCharaPtr->ClassJob).Abbreviation]));
                     }
                     seStringBuilder.Append(" was killed!");
                     var notification = new Notification(TimeSpan.FromSeconds(5), seStringBuilder.ToReadOnlySeString(), "Kill feed");
@@ -70,11 +74,13 @@ public class MainPlugin : IDalamudPlugin
 
     public void Dispose()
     {
-        framework.Service.Update -= Service_Update;
+        // framework.Service.Update -= Service_Update;
         pluginInterface.UiBuilder.Draw -= NotificationDrawer.Draw;
         framework.Dispose();
         logger.Dispose();
-        dataManager.Dispose();
+        DataManager.Dispose();
+        SeStringEvaluator.Dispose();
+        GameInteropProvider.Dispose();
     }
 }
 
