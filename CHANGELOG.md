@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.2] (2025-08-01)
+Add who last was targeted when death happened
+
 ## [1.0.1] (2025-08-01)
 Made death message trigger from death packet
 

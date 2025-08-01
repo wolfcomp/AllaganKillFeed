@@ -1,12 +1,10 @@
 using Dalamud.Interface.Utility;
 using ImGuiNET;
 using Lumina.Text.ReadOnly;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Numerics;
-using System.Threading;
 using Dalamud.Interface.Colors;
+using Dalamud.Interface.ImGuiSeStringRenderer;
 
 namespace AllaganKillFeed;
 
@@ -27,7 +25,7 @@ internal class NotificationConstants
     public static Vector4 BackgroundProgressColorMin = new(1, 1, 1, .05f);
     public static Vector4 BackgroundProgressColorMax = new(1, 1, 1, .1f);
     public static Vector4 BlameTextColor = new(.8f,.8f, .8f, 1f);
-    public static Vector4 BodyTextColor = new(.9f, .9f, .9f, 1f);
+    public const uint BodyTextColor = 0xFF8080FF;
 }
 
 internal class NotificationDrawer
@@ -165,9 +163,11 @@ internal record ActiveNotification(DateTime CreatedAt, DateTime Expiry, TimeSpan
     {
         ImGui.SetCursorPos(minCoord);
         ImGui.PushTextWrapPos(minCoord.X + width);
-        ImGui.PushStyleColor(ImGuiCol.Text, NotificationConstants.BodyTextColor);
-        ImGuiHelpers.SeStringWrapped(Content);
-        ImGui.PopStyleColor();
+        ImGuiHelpers.SeStringWrapped(Content, new SeStringDrawParams
+        {
+            Color = NotificationConstants.BodyTextColor,
+            Opacity = 1
+        });
         ImGui.PopTextWrapPos();
     }
 
@@ -177,8 +177,10 @@ internal record ActiveNotification(DateTime CreatedAt, DateTime Expiry, TimeSpan
 
         ImGui.SetCursorPos(minCoord);
         ImGui.PushStyleColor(ImGuiCol.Text, NotificationConstants.TitleTextColor);
+        ImGui.PushStyleVar(ImGuiStyleVar.Alpha, 1);
         ImGui.TextUnformatted(Title);
         ImGui.PopStyleColor();
+        ImGui.PopStyleVar();
 
         ImGui.PopTextWrapPos();
         return ImGui.GetCursorPosY() - minCoord.Y;
