@@ -51,7 +51,6 @@ public class MainPlugin : IDalamudPlugin
                 case <= 0 when killedLastSecond.TryAdd(entityId, true):
                 {
                     var seStringBuilder = new SeStringBuilder();
-                    seStringBuilder.Append("Killed: ");
                     seStringBuilder.Append(battleCharaPtr->NameString);
                     if (battleCharaPtr->ClassJob > 0)
                     {
