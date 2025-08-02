@@ -76,11 +76,11 @@ internal unsafe class PacketCapture : IDisposable
                         {
                             seStringBuilder.Append(" ");
                             seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(lastDamageGameObject->ClassJob).Abbreviation]));
+                            seStringBuilder.Append("!");
                         }
                     }
                     else
                     {
-                        seStringBuilder.Append("Killed: ");
                         seStringBuilder.Append(battleChara->NameString);
                         if (battleChara->ClassJob > 0)
                         {
@@ -92,7 +92,6 @@ internal unsafe class PacketCapture : IDisposable
                 }
                 else
                 {
-                    seStringBuilder.Append("Killed: ");
                     seStringBuilder.Append(battleChara->NameString);
                     if (battleChara->ClassJob > 0)
                     {
