@@ -55,51 +55,17 @@ internal unsafe class PacketCapture : IDisposable
         switch (type)
         {
             case 0x6: // Death
-                var battleChara = (BattleChara*)gameObjectManager->Objects.GetObjectByEntityId(entityId);
+                var battleChara = gameObjectManager->Objects.GetBattleCharaByEntityId(entityId);
                 if (battleChara == null) return;
-                if (battleChara->ObjectKind is not (ObjectKind.Pc or ObjectKind.BattleNpc)) return;
                 var seStringBuilder = new SeStringBuilder();
-                if (lastDamages.TryGetValue(entityId, out var lastDamageEntityId))
+                seStringBuilder.AppendBattleChara(battleChara);
+                seStringBuilder.Append(" was killed");
+                if (lastDamages.TryGetValue(entityId, out var lastDamageEntityId) && (battleChara = gameObjectManager->Objects.GetBattleCharaByEntityId(lastDamageEntityId)) != null)
                 {
-                    var lastDamageGameObject = (BattleChara*)gameObjectManager->Objects.GetObjectByEntityId(lastDamageEntityId);
-                    if (lastDamageGameObject != null && lastDamageGameObject->ObjectKind is (ObjectKind.Pc or ObjectKind.BattleNpc))
-                    {
-                        seStringBuilder.Append(battleChara->NameString);
-                        if (battleChara->ClassJob > 0)
-                        {
-                            seStringBuilder.Append(" ");
-                            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
-                        }
-                        seStringBuilder.Append(" was killed by ");
-                        seStringBuilder.Append(lastDamageGameObject->NameString);
-                        if (lastDamageGameObject->ClassJob > 0)
-                        {
-                            seStringBuilder.Append(" ");
-                            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(lastDamageGameObject->ClassJob).Abbreviation]));
-                        }
-                        seStringBuilder.Append("!");
-                    }
-                    else
-                    {
-                        seStringBuilder.Append(battleChara->NameString);
-                        if (battleChara->ClassJob > 0)
-                        {
-                            seStringBuilder.Append(" ");
-                            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
-                        }
-                        seStringBuilder.Append(" was killed!");
-                    }
-                }
-                else
-                {
-                    seStringBuilder.Append(battleChara->NameString);
-                    if (battleChara->ClassJob > 0)
-                    {
-                        seStringBuilder.Append(" ");
-                        seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
-                    }
-                    seStringBuilder.Append(" was killed!");
-                }
+                    seStringBuilder.Append(" by ");
+                    seStringBuilder.AppendBattleChara(battleChara);
+                } 
+                seStringBuilder.Append("!");
                 var notification = new Notification(TimeSpan.FromSeconds(5), seStringBuilder.ToReadOnlySeString(), "Kill feed");
                 NotificationManager.PendingNotifications.Add(notification.ToActiveNotification);
                 break;
