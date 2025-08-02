@@ -78,6 +78,10 @@ internal unsafe class PacketCapture : IDisposable
                             seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(lastDamageGameObject->ClassJob).Abbreviation]));
                             seStringBuilder.Append("!");
                         }
+                        else
+                        {
+                            seStringBuilder.Append("!");
+                        }
                     }
                     else
                     {
