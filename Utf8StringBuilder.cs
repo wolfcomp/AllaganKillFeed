@@ -43,9 +43,9 @@ public class Utf8StringBuilder
 
     public void Append(string value) => Append(value, 0, value.Length);
 
-    public void Append(string value, int startIndex, int length) => Append(Encoding.UTF8.GetBytes(value, startIndex, length).AsSpan());
+    public void Append(string value, int startIndex, int length) => AppendInternal(Encoding.UTF8.GetBytes(value, startIndex, length).AsSpan());
 
-    public void Append(ReadOnlySpan<byte> value) => AppendInternal(value);
+    public unsafe void Append(ReadOnlySpan<byte> value) => AppendInternal(value.IndexOf(byte.MinValue) < 0 ? value : value[..value.IndexOf(byte.MinValue)]);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining | MethodImplOptions.AggressiveOptimization)]
     [SkipLocalsInit]

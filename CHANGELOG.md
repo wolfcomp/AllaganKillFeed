@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.5] (2025-08-01)
+Fix null byte terminator issue
+
 ## [1.0.4] (2025-08-01)
 Some cleanup before introducing config options
 
