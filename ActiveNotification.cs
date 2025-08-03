@@ -2,7 +2,6 @@ using System.Numerics;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.ImGuiSeStringRenderer;
 using Dalamud.Interface.Utility;
-using ImGuiNET;
 using Lumina.Text.ReadOnly;
 
 namespace AllaganKillFeed;

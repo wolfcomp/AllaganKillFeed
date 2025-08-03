@@ -1,5 +1,8 @@
 # Changelog
 
+## [1.0.4] (2025-08-01)
+Some cleanup before introducing config options
+
 ## [1.0.3] (2025-08-01)
 Fix index lookup crash
 

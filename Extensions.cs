@@ -1,23 +1,20 @@
 ﻿using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using Lumina.Excel.Sheets;
-using Lumina.Text;
 
 namespace AllaganKillFeed;
 
 internal static class Extensions
 {
-    public static unsafe SeStringBuilder AppendBattleChara(this SeStringBuilder seStringBuilder,
-        BattleChara* battleChara)
+    public static unsafe Utf8StringBuilder AppendBattleChara(this Utf8StringBuilder stringBuilder, BattleChara* battleChara)
     {
-        seStringBuilder.Append(battleChara->Name);
+        stringBuilder.Append(battleChara->Name);
         // ReSharper disable once InvertIf
         if (battleChara->ClassJob > 0)
         {
-            seStringBuilder.Append(" ");
-            seStringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
+            stringBuilder.Append(" ");
+            stringBuilder.Append(MainPlugin.SeStringEvaluator.Service.EvaluateFromAddon(37, [MainPlugin.DataManager.Service.GetExcelSheet<ClassJob>().GetRow(battleChara->ClassJob).Abbreviation]));
         }
-        return seStringBuilder;
+        return stringBuilder;
     }
     
     public static unsafe BattleChara* GetBattleCharaByEntityId(this GameObjectManager.ObjectArrays gameObjectArrays, uint entityId)

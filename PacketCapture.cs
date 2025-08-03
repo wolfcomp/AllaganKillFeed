@@ -3,8 +3,6 @@ using Dalamud.Hooking;
 using Dalamud.Utility.Signatures;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using Lumina.Excel.Sheets;
-using Lumina.Text;
 
 namespace AllaganKillFeed;
 
@@ -57,7 +55,7 @@ internal unsafe class PacketCapture : IDisposable
             case 0x6: // Death
                 var battleChara = gameObjectManager->Objects.GetBattleCharaByEntityId(entityId);
                 if (battleChara == null) return;
-                var seStringBuilder = new SeStringBuilder();
+                var seStringBuilder = new Utf8StringBuilder();
                 seStringBuilder.AppendBattleChara(battleChara);
                 seStringBuilder.Append(" was killed");
                 if (lastDamages.TryGetValue(entityId, out var lastDamageEntityId) && (battleChara = gameObjectManager->Objects.GetBattleCharaByEntityId(lastDamageEntityId)) != null)
@@ -66,7 +64,7 @@ internal unsafe class PacketCapture : IDisposable
                     seStringBuilder.AppendBattleChara(battleChara);
                 } 
                 seStringBuilder.Append("!");
-                var notification = new Notification(TimeSpan.FromSeconds(5), seStringBuilder.ToReadOnlySeString(), "Kill feed");
+                var notification = new Notification(TimeSpan.FromSeconds(5), seStringBuilder.AsSpan(), "Kill feed");
                 NotificationManager.PendingNotifications.Add(notification.ToActiveNotification);
                 break;
         }
