@@ -23,6 +23,7 @@ on:
         options:
           - master
           - stg
+          - api13
 
 jobs:
   build:
