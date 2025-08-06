@@ -11,7 +11,7 @@ internal static class NotificationDrawer
         var viewportSize = ImGuiHelpers.MainViewport.WorkSize;
         Vector2 notificationSize;
         fixed (byte* ptr = notificationWidthMeasurementString)
-            ImGuiNative.igCalcTextSize(&notificationSize, ptr, ptr + notificationWidthMeasurementString.Length, 0, -1);
+            ImGuiNative.CalcTextSize(&notificationSize, ptr, ptr + notificationWidthMeasurementString.Length, 0, -1);
         var width = notificationSize.X;
         width += NotificationConstants.ScaledWindowPadding * 3;
         return Math.Min(width, viewportSize.X * NotificationConstants.MaxNotificationWindowWidthWrtMainViewportWidth);

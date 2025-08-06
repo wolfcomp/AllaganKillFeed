@@ -1,9 +1,12 @@
 # Changelog
 
-## [1.0.5] (2025-08-01)
+## [1.0.6] (2025-08-06)
+API 13 update
+
+## [1.0.5] (2025-08-05)
 Fix null byte terminator issue
 
-## [1.0.4] (2025-08-01)
+## [1.0.4] (2025-08-03)
 Some cleanup before introducing config options
 
 ## [1.0.3] (2025-08-01)
