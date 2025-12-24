@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Dalamud.Hooking;
 using Dalamud.Utility.Signatures;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
@@ -19,7 +19,7 @@ internal unsafe class PacketCapture : IDisposable
         processPacketActorControlHook.Enable();
     }
 
-    private delegate void ProcessPacketActorControlDelegate(uint entityId, uint type, uint param1, uint param2, uint param3, uint param4, uint param5, uint param6, ulong param7, byte isReplay);
+    private delegate void ProcessPacketActorControlDelegate(uint entityId, uint type, uint param1, uint param2, uint param3, uint param4, uint param5, uint param6, uint param7, uint param8, ulong objectId, byte isReplay);
 
     private readonly Hook<ActionEffectHandler.Delegates.Receive> processPacketActionEffectHook;
 
@@ -45,9 +45,9 @@ internal unsafe class PacketCapture : IDisposable
         }
     }
 
-    private void ProcessPacketActorControlDetour(uint entityId, uint type, uint param1, uint param2, uint param3, uint param4, uint param5, uint param6, ulong param7, byte isReplay)
+    private void ProcessPacketActorControlDetour(uint entityId, uint type, uint param1, uint param2, uint param3, uint param4, uint param5, uint param6, uint param7, uint param8, ulong objectId, byte isReplay)
     {
-        processPacketActorControlHook.Original(entityId, type, param1, param2, param3, param4, param5, param6, param7, isReplay);
+        processPacketActorControlHook.Original(entityId, type, param1, param2, param3, param4, param5, param6, param7, param8, objectId, isReplay);
         if (isReplay != 0) return; // Ignore replays
         var gameObjectManager = GameObjectManager.Instance();
         switch (type)
